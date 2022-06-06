@@ -144,6 +144,10 @@ void Interface::detectCommand()
                 (*currentInstrument)->notes[i + 16 * currentPage].toggleAcc();
                 stepButtons[i]->unpress();
             }
+            if (i < 8)
+            {
+                instruments[i].repeating = instButtonState[i];
+            }
         }
     }
 

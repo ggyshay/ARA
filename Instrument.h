@@ -13,6 +13,7 @@ public:
     Note notes[64];
     byte pitch = 63;
     byte velocity = 127;
+    bool repeating = false;
     void reset()
     {
         currentNote = 0;
@@ -55,7 +56,7 @@ public:
 
     MIDIEvent *calculateNextEvent(float bpm)
     {
-        if (isMuted || (notes[currentNote].gate == 0))
+        if (!repeating && (isMuted || (notes[currentNote].gate == 0)))
         {
             return nullptr;
         }
