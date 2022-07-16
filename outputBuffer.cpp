@@ -51,3 +51,8 @@ unsigned long OutputBuffer::sendNext()
     unsigned long frontTS = buffer.front().timestamp;
     return frontTS - now;
 }
+
+void OutputBuffer::clear()
+{
+    buffer.clear();
+}

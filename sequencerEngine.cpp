@@ -36,13 +36,16 @@ MIDIEvent **SequencerEngine::getNextEvent()
     {
         instruments[i].getNextEvent();
     }
+    generalNoteIndex = (generalNoteIndex + 1) % 64;
     nextEventReady = false;
     return nextEvents;
 }
 
 void SequencerEngine::resetSequencerPosition()
 {
+    nextEventReady = false;
     lastCalculatedNote = 0;
+    generalNoteIndex = 0;
     for (byte i = 0; i < 8; i++)
     {
         instruments[i].resetSequencePosition();
@@ -65,18 +68,19 @@ void SequencerEngine::handleInterfaceMessage(byte t, byte v)
     {
 
         currentInstrument->sequenceLength = v;
+        currentInstrument->currentNote = generalNoteIndex % v;
         break;
     }
     case MSG_CLEAR_ALL:
     {
         for (byte i = 0; i < 8; i++)
         {
-            instruments[i].reset();
+            instruments[i].reset(generalNoteIndex);
         }
         break;
     }
     case MSG_CLEAR_INSTRUMENT:
-        instruments[v].reset();
+        instruments[v].reset(generalNoteIndex);
         break;
     case MSG_TOGGLE_MUTE_INSTRUMENT:
         instruments[v].isMuted = !instruments[v].isMuted;

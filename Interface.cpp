@@ -15,6 +15,7 @@ void Interface::setStepsPointersMode(byte mode)
 
         for (byte i = 0; i < 16; i++)
         {
+            stepButtons[i]->unpress();
             stepButtons[i]->setPointer([this, i]() -> void
                                        { (*currentInstrument)->notes[i + currentPage * 16].toggle(); });
             stepButtons[i]->isReleaseSensitive = false;

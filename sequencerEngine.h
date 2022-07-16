@@ -19,6 +19,7 @@ public:
     Instrument instruments[8];
     Instrument *currentInstrument = instruments;
     byte currentInstrumentIndex = 0;
+    byte generalNoteIndex = 0;
     void handleInterfaceMessage(byte t, byte v);
 
 private:

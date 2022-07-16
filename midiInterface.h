@@ -9,6 +9,7 @@ private:
     std::function<void(void)> onClockCallback;
     byte counter = 0;
     IntervalTimer internalClockTimer;
+    bool locked = true;
 
 public:
     void begin();
@@ -17,6 +18,7 @@ public:
     void update();
     void midiTick();
     void stopClock();
+    void startClock();
     std::function<void(void)> onStopClock;
 };
 

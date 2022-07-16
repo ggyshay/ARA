@@ -18,7 +18,7 @@ void triggerSend()
 void setup()
 {
     Serial.begin(115200);
-    delay(400);
+    delay(100);
     sequencer.setup();
 
     interface.currentInstrument = &(sequencer.currentInstrument);
@@ -26,7 +26,7 @@ void setup()
     interface.instruments = sequencer.instruments;
     interface.sendMessage = [](byte msg, byte value)
     {
-        Serial.printf("send message: %d, %d\n", msg, value);
+        // Serial.printf("send message: %d, %d\n", msg, value);
         sequencer.handleInterfaceMessage(msg, value);
     };
     interface.setup();
@@ -35,6 +35,7 @@ void setup()
     midiInterface.begin();
     midiInterface.setHandleClock([]() -> void
                                  {
+        Serial.println("handle clock");
         scheduler.onMIDIClock();
         MIDIEvent **event_ptr = sequencer.getNextEvent();
         
@@ -43,6 +44,7 @@ void setup()
         scheduler.registerTimeToNextEvent(timeToNextEvent); });
     midiInterface.onStopClock = []() -> void
     {
+        Serial.println("stop clock");
         sequencer.resetSequencerPosition();
     };
     Serial.println("midi interface setup");

@@ -5,11 +5,19 @@
 
 static void handleMIDIClockOuter()
 {
+    Serial.println("handle clock outer");
     midiInterface.midiTick();
 }
 static void handleMIDIClockStopOuter()
 {
+    Serial.println("stop clock outer");
     midiInterface.stopClock();
+}
+
+static void handleMIDIClockStartOuter()
+{
+    Serial.println("start clock outer");
+    midiInterface.startClock();
 }
 
 static void handleScheduleMIDIReadTick()
@@ -21,11 +29,14 @@ void MIDIInterface::begin()
 {
     usbMIDI.setHandleClock(handleMIDIClockOuter);
     usbMIDI.setHandleStop(handleMIDIClockStopOuter);
+    usbMIDI.setHandleStart(handleMIDIClockStartOuter);
     internalClockTimer.begin(handleScheduleMIDIReadTick, 250);
 }
 
 void MIDIInterface::midiTick()
 {
+    if (locked)
+        return;
     if (counter == 0)
     {
         onClockCallback();
@@ -36,7 +47,14 @@ void MIDIInterface::midiTick()
 void MIDIInterface::stopClock()
 {
     counter = 0;
+    locked = true;
     onStopClock();
+}
+
+void MIDIInterface::startClock()
+{
+    counter = 0;
+    locked = false;
 }
 
 void MIDIInterface::setHandleClock(std::function<void(void)> callback)

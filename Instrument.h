@@ -14,10 +14,10 @@ public:
     byte pitch = 63;
     byte velocity = 127;
     bool repeating = false;
-    void reset()
+    void reset(byte globalPosition)
     {
-        currentNote = 0;
         sequenceLength = 16;
+        currentNote = globalPosition % sequenceLength;
         for (byte i = 0; i < 64; i++)
         {
             notes[i].reset();

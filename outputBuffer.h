@@ -18,4 +18,5 @@ public:
     void setOutputCallback(std::function<void(EdgeEvent e)> callback);
     unsigned long sendNext();
     EdgeEvent *getNextEdge();
+    void clear();
 };
