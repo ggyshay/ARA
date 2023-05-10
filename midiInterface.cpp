@@ -76,5 +76,6 @@ void MIDIInterface::sendMessage(EdgeEvent event)
 
 void MIDIInterface::update()
 {
-    usbMIDI.read();
+    while (usbMIDI.read())
+        ;
 }
