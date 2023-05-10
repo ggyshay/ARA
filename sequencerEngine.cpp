@@ -1,5 +1,6 @@
 #include "midiEvent.h"
 #include "sequencerEngine.h"
+#include "constants.h"
 
 void SequencerEngine::setup()
 {
@@ -30,7 +31,9 @@ MIDIEvent **SequencerEngine::getNextEvent()
 {
     if (nextEventReady == false)
     {
-        Serial.println("tryied sending none event");
+        // Serial.println("tryied sending none event");
+        // onError(ERR_SEQ_NOTE);
+        calculateNextEvent();
     }
     for (byte i = 0; i < 8; i++)
     {
@@ -60,7 +63,7 @@ void SequencerEngine::handleInterfaceMessage(byte t, byte v)
     {
 
         currentInstrument = instruments + v;
-        Serial.printf("currentInstrument Engine: %d\n", currentInstrument);
+        // Serial.printf("currentInstrument Engine: %d\n", currentInstrument);
         currentInstrumentIndex = v;
         break;
     }

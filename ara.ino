@@ -4,6 +4,7 @@
 #include "midiInterface.h"
 #include "midiEvent.h"
 #include "outputBuffer.h"
+#include "constants.h"
 
 Interface interface;
 SequencerEngine sequencer;
@@ -30,32 +31,40 @@ void setup()
         sequencer.handleInterfaceMessage(msg, value);
     };
     interface.setup();
-    Serial.println("interface setup");
+    // Serial.println("interface setup");
 
     midiInterface.begin();
     midiInterface.setHandleClock([]() -> void
                                  {
-        Serial.println("handle clock");
+        // Serial.println("handle clock");
         scheduler.onMIDIClock();
         MIDIEvent **event_ptr = sequencer.getNextEvent();
         
         outputBuffer.registerEvents(event_ptr);
         unsigned long timeToNextEvent = outputBuffer.sendNext();
         scheduler.registerTimeToNextEvent(timeToNextEvent); });
+    midiInterface.onError = [](byte errorCode) -> void
+    {
+        interface.setError(errorCode);
+    };
     midiInterface.onStopClock = []() -> void
     {
-        Serial.println("stop clock");
+        interface.setError(ERR_NO_ERROR);
         sequencer.resetSequencerPosition();
     };
-    Serial.println("midi interface setup");
+    // Serial.println("midi interface setup");
 
     outputBuffer.setOutputCallback([](EdgeEvent e) -> void
                                    { midiInterface.sendMessage(e); });
     sequencer.bpmEstimate = &(scheduler.bpmEstimate);
+    sequencer.onError = [](byte errorCode)
+    {
+        interface.setError(errorCode);
+    };
     scheduler.setTickCallback(triggerSend);
     scheduler.begin();
 
-    Serial.println("all setup");
+    // Serial.println("all setup");
 };
 
 void loop()

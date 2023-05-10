@@ -13,7 +13,7 @@ int OutputBuffer::registerEvents(MIDIEvent **(events))
         MIDIEvent *e = events[i];
         if (e != nullptr)
         {
-            Serial.printf("event %d: %d, %d, %d, %d\n", i, e->channel, e->note, e->velocity, e->duration);
+            // Serial.printf("event %d: %d, %d, %d, %d\n", i, e->channel, e->note, e->velocity, e->duration);
             EdgeEvent risingEdge(now, e->channel, e->note, e->velocity);
             EdgeEvent fallingEdge(now + e->duration, e->channel, e->note, 0);
             buffer.push_back(risingEdge);

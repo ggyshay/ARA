@@ -14,4 +14,9 @@
 #define MSG_DUPLICATE_LOOP 5
 #define MSG_REPEATING_INSTRUMENT 6
 
+#define ERR_NO_ERROR 0
+#define ERR_LOCK 1
+#define ERR_SYSEX 2
+#define ERR_SEQ_NOTE 3
+
 extern unsigned long MAX_U_LONG_VAL;

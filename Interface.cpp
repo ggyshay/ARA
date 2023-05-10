@@ -166,6 +166,23 @@ void Interface::detectCommand()
 
 void Interface::writeLedMode(byte i)
 {
+    if (errorState)
+    {
+        switch (errorState)
+        {
+        case ERR_LOCK:
+            writeStepLed(C_YELLOW);
+            break;
+        case ERR_SEQ_NOTE:
+            if (i % 2 == 0)
+                writeStepLed(C_GREEN);
+            break;
+        default:
+            break;
+        }
+        return;
+    }
+
     switch (stepMode)
     {
     case ACC_MODE:
@@ -192,6 +209,9 @@ void Interface::writeInstrumentLed(byte i)
 {
     if (instruments[i].isMuted)
         return writeInstLed(C_BLACK);
+
+    if (instruments[i].velocity == 0)
+        return writeInstLed(C_GREEN);
 
     writeInstLed(getInstColor(*currentInstrumentIndex == i));
 }
@@ -235,4 +255,9 @@ void Interface::update()
     detectCommand();
     detectPageChange();
     updateCounter = (updateCounter + 1) % 16;
+}
+
+void Interface::setError(byte errorCode)
+{
+    errorState = errorCode;
 }

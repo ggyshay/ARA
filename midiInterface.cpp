@@ -1,22 +1,23 @@
 #include <stdlib.h>
 #include <functional>
+#include "constants.h"
 
 #include "midiInterface.h"
 
 static void handleMIDIClockOuter()
 {
-    Serial.println("handle clock outer");
+    // Serial.println("handle clock outer");
     midiInterface.midiTick();
 }
 static void handleMIDIClockStopOuter()
 {
-    Serial.println("stop clock outer");
+    // Serial.println("stop clock outer");
     midiInterface.stopClock();
 }
 
 static void handleMIDIClockStartOuter()
 {
-    Serial.println("start clock outer");
+    // Serial.println("start clock outer");
     midiInterface.startClock();
 }
 
@@ -36,7 +37,10 @@ void MIDIInterface::begin()
 void MIDIInterface::midiTick()
 {
     if (locked)
+    {
+        onError(ERR_LOCK);
         return;
+    }
     if (counter == 0)
     {
         onClockCallback();
@@ -49,12 +53,14 @@ void MIDIInterface::stopClock()
     counter = 0;
     locked = true;
     onStopClock();
+    onError(ERR_NO_ERROR);
 }
 
 void MIDIInterface::startClock()
 {
     counter = 0;
     locked = false;
+    onError(ERR_NO_ERROR);
 }
 
 void MIDIInterface::setHandleClock(std::function<void(void)> callback)

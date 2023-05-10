@@ -8,6 +8,7 @@
 #include <functional>
 #include "Note.h"
 #include "HAL.h"
+#include "constants.h"
 
 #define NORMAL_MODE 0
 #define LENGTH_MODE 1
@@ -35,6 +36,7 @@ private:
     void detectPageChange();
     byte updateCounter = 0;
     byte currentPage = 0;
+    byte errorState = ERR_NO_ERROR;
 
 public:
     Instrument **currentInstrument;
@@ -44,5 +46,6 @@ public:
     // Note *notes;
     void setup();
     void update();
+    void setError(byte errorCode);
     std::function<void(byte msg, byte value)> sendMessage;
 };

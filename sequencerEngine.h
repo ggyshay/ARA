@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <functional>
 #include "midiEvent.h"
 #include "arduino.h"
 #include "Constants.h"
@@ -21,6 +23,7 @@ public:
     byte currentInstrumentIndex = 0;
     byte generalNoteIndex = 0;
     void handleInterfaceMessage(byte t, byte v);
+    std::function<void(byte)> onError;
 
 private:
     MIDIEvent *nextEvents[8];

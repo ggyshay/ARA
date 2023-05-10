@@ -19,6 +19,7 @@ public:
     void midiTick();
     void stopClock();
     void startClock();
+    std::function<void(byte)> onError;
     std::function<void(void)> onStopClock;
 };
 
