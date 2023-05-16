@@ -13,7 +13,6 @@ int OutputBuffer::registerEvents(MIDIEvent **(events))
         MIDIEvent *e = events[i];
         if (e != nullptr)
         {
-            // Serial.printf("event %d: %d, %d, %d, %d\n", i, e->channel, e->note, e->velocity, e->duration);
             EdgeEvent risingEdge(now, e->channel, e->note, e->velocity);
             EdgeEvent fallingEdge(now + e->duration, e->channel, e->note, 0);
             buffer.push_back(risingEdge);
@@ -24,9 +23,7 @@ int OutputBuffer::registerEvents(MIDIEvent **(events))
     std::sort(buffer.begin(), buffer.end(), bufferSorter);
     return buffer.front().timestamp - now;
 }
-// void OutputBuffer::registerClock()
-// {
-// }
+
 void OutputBuffer::setOutputCallback(std::function<void(EdgeEvent e)> callback)
 {
     sendCallback = callback;
@@ -39,7 +36,7 @@ unsigned long OutputBuffer::sendNext()
         return MAX_U_LONG_VAL;
     }
     unsigned long now = micros();
-    while (buffer.front().timestamp < (now + 1) && buffer.size() > 0)
+    while ((buffer.front().timestamp < (now + 1)) && (buffer.size() > 0))
     {
         sendCallback(buffer.front());
         buffer.erase(buffer.begin());

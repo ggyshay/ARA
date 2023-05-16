@@ -31,7 +31,7 @@ void MIDIInterface::begin()
     usbMIDI.setHandleClock(handleMIDIClockOuter);
     usbMIDI.setHandleStop(handleMIDIClockStopOuter);
     usbMIDI.setHandleStart(handleMIDIClockStartOuter);
-    internalClockTimer.begin(handleScheduleMIDIReadTick, 250);
+    internalClockTimer.begin(handleScheduleMIDIReadTick, 500);
 }
 
 void MIDIInterface::midiTick()
@@ -76,6 +76,7 @@ void MIDIInterface::sendMessage(EdgeEvent event)
 
 void MIDIInterface::update()
 {
+    // Serial.println("1");
     while (usbMIDI.read())
         ;
 }

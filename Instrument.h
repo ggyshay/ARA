@@ -60,10 +60,11 @@ public:
         {
             return nullptr;
         }
+        noInterrupts();
         float noteVelocity = 1.0 * (notes[currentNote].velocity * 37 + 90);
         noteVelocity *= velocity / 127.0;
         nextEvent.set(0, pitch, (byte)noteVelocity, 80 * 150000.0 / bpm);
-
+        interrupts();
         return &nextEvent;
         // nextEventReady = true;
     }

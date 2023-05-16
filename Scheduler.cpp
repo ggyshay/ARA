@@ -1,4 +1,4 @@
-#include "scheduler.h"
+#include "Scheduler.h"
 
 static void handleClockOuter();
 Scheduler::Scheduler(/* args */)
@@ -12,6 +12,7 @@ void Scheduler::begin()
 
 void Scheduler::tick()
 {
+    // Serial.println("2");
     if (tickCallback != nullptr)
     {
         tickCallback();

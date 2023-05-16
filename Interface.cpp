@@ -2,8 +2,10 @@
 
 void Interface::setStepsPointersMode(byte mode)
 {
+    noInterrupts();
     if (mode == stepMode)
     {
+        interrupts();
         return;
     }
     stepMode = mode;
@@ -36,6 +38,7 @@ void Interface::setStepsPointersMode(byte mode)
     default:
         break;
     }
+    interrupts();
 }
 
 void Interface::setup()
@@ -230,6 +233,7 @@ void Interface::detectPageChange()
 
 void Interface::update()
 {
+    // Serial.println("i");
     int now = millis();
     for (byte i = 0; i < 16; ++i)
     {
@@ -255,6 +259,7 @@ void Interface::update()
     detectCommand();
     detectPageChange();
     updateCounter = (updateCounter + 1) % 16;
+    // Serial.println("o");
 }
 
 void Interface::setError(byte errorCode)

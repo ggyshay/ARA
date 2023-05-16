@@ -1,3 +1,4 @@
+#include "Arduino.h"
 #include "Interface.h"
 #include "sequencerEngine.h"
 #include "Scheduler.h"
@@ -11,6 +12,7 @@ SequencerEngine sequencer;
 Scheduler scheduler;
 MIDIInterface midiInterface;
 OutputBuffer outputBuffer;
+
 void triggerSend()
 {
     unsigned long timeToNextEventMicros = outputBuffer.sendNext();
@@ -63,7 +65,6 @@ void setup()
     };
     scheduler.setTickCallback(triggerSend);
     scheduler.begin();
-
     // Serial.println("all setup");
 };
 
